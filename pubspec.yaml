@@ -7,8 +7,10 @@ environment:
   sdk: ^3.10.0
 
 dependencies:
+  dio: ^5.9.1
   flutter:
     sdk: flutter
+  mobx: ^2.6.0
 
 dev_dependencies:
   flutter_test:

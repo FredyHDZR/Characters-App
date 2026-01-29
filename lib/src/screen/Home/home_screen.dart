@@ -2,13 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_character_app/src/components/circle_icon_button.dart';
+import 'package:flutter_character_app/src/components/loading_component.dart';
 import 'package:flutter_character_app/src/components/popup_menu.dart';
+import 'package:flutter_character_app/src/routes/index.dart';
 import 'package:flutter_character_app/src/screen/Home/components/character_item.dart';
 import 'package:flutter_character_app/src/theme/app_colors.dart';
 import 'package:flutter_character_app/src/theme/app_fonts.dart';
 import 'package:flutter_character_app/src/utils/constants.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:lottie/lottie.dart';
 
 import 'components/search_bar.dart';
 import 'home_controller.dart';
@@ -52,23 +53,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
     var items = <PopupMenuEntry<String>>[
       PopupMenuItem<String>(
-        value: 'gender',
+        value: genderKey,
         child: Text(
-          'Género',
+          genderTitle,
           style: AppFonts.normalText.copyWith(color: AppColors.text),
         ),
       ),
       PopupMenuItem<String>(
-        value: 'species',
+        value: speciesKey,
         child: Text(
-          'Especie',
+          speciesTitle,
           style: AppFonts.normalText.copyWith(color: AppColors.text),
         ),
       ),
       PopupMenuItem<String>(
-        value: 'clear_all',
+        value: clearAllKey,
         child: Text(
-          'Limpiar filtros',
+          clearAllTitle,
           style: AppFonts.normalText.copyWith(color: AppColors.text),
         ),
       ),
@@ -105,22 +106,27 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ];
 
-    return PopupMenu.show(context, position: position, title: title, items: items);
+    return PopupMenu.show(
+      context,
+      position: position,
+      title: title,
+      items: items,
+    );
   }
 
   Future<void> _openFilterMenu(BuildContext context) async {
     final category = await _showFilterCategoryMenu(context);
     if (!mounted || category == null) return;
 
-    if (category == 'clear_all') {
+    if (category == clearAllKey) {
       controller.clearFilters();
       return;
     }
 
-    if (category == 'gender') {
+    if (category == genderKey) {
       final value = await _showFilterValueMenu(
         context: context,
-        title: 'Género',
+        title: genderTitle,
         values: controller.availableGenders,
         selectedValue: controller.selectedGender,
       );
@@ -129,10 +135,10 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    if (category == 'species') {
+    if (category == speciesKey) {
       final value = await _showFilterValueMenu(
         context: context,
-        title: 'Especie',
+        title: speciesTitle,
         values: controller.availableSpecies,
         selectedValue: controller.selectedSpecies,
       );
@@ -211,25 +217,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   return loading();
                 }
                 if (controller.filteredCharacters.isEmpty) {
-                  return Center(child: Text('No se encontraron personajes'));
+                  return Center(
+                    child: Text(
+                      noCharactersFound,
+                      style: AppFonts.normalText.copyWith(
+                        color: AppColors.text,
+                      ),
+                    ),
+                  );
                 }
                 return ListView.builder(
                   controller: _scrollController,
                   padding: EdgeInsets.symmetric(vertical: 24),
-                  itemCount: controller.filteredCharacters.length +
+                  itemCount:
+                      controller.filteredCharacters.length +
                       (controller.isLoadingMore ? 1 : 0),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     if (index == controller.filteredCharacters.length) {
                       return const Padding(
                         padding: EdgeInsets.all(16.0),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                        child: Center(child: CircularProgressIndicator()),
                       );
                     }
-                    return CharacterItem(
-                      character: controller.filteredCharacters[index],
+                    return GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        RouteNames.characterDetail,
+                        arguments: controller.filteredCharacters[index],
+                      ),
+                      child: CharacterItem(
+                        character: controller.filteredCharacters[index],
+                      ),
                     );
                   },
                 );
@@ -238,12 +257,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget loading() {
-    return Center(
-      child: Lottie.asset(loadingAnimation, width: 150, height: 150),
     );
   }
 }

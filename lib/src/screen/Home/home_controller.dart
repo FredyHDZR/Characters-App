@@ -114,12 +114,12 @@ abstract class HomeControllerBase with Store {
   }
 
   @action
-  void getCharacters() async {
+  Future<void> getCharacters() async {
     toggleLoading();
     final response = await HomeService.getCharacters(page: page);
     page = response['nextPage'];
     if (response['error'] != null) {
-      //showSnackBar(response['error']);
+      //TODO: showSnackBar(response['error']);
       toggleLoading();
       return;
     }
@@ -129,7 +129,7 @@ abstract class HomeControllerBase with Store {
   }
 
   @action
-  void loadMoreCharacters() async {
+  Future<void> loadMoreCharacters() async {
     if (isLoadingMore || !hasMore) return;
     
     isLoadingMore = true;

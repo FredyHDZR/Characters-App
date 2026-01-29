@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_character_app/src/components/circle_icon_button.dart';
 import 'package:flutter_character_app/src/components/popup_menu.dart';
-import 'package:flutter_character_app/src/models/character_model.dart';
 import 'package:flutter_character_app/src/screen/Home/components/character_item.dart';
 import 'package:flutter_character_app/src/theme/app_colors.dart';
 import 'package:flutter_character_app/src/theme/app_fonts.dart';
@@ -24,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController controller = HomeController();
   final GlobalKey _filterButtonKey = GlobalKey();
+  final ScrollController _scrollController = ScrollController();
 
   RelativeRect? _menuPositionFromKey(BuildContext context, GlobalKey key) {
     final buttonContext = key.currentContext;
@@ -145,14 +145,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    controller.toggleLoading();
-    List<Character> characters = (mockData['items'] as List<dynamic>)
-        .map((e) => Character.fromJson(e))
-        .toList();
-    controller.setCharacters(characters);
-    Future.delayed(Duration(seconds: 5), () {
-      controller.toggleLoading();
-    });
+    controller.getCharacters();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.9) {
+      if (controller.hasMore && !controller.isLoadingMore) {
+        controller.loadMoreCharacters();
+      }
+    }
   }
 
   @override
@@ -204,12 +214,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Center(child: Text('No se encontraron personajes'));
                 }
                 return ListView.builder(
+                  controller: _scrollController,
                   padding: EdgeInsets.symmetric(vertical: 24),
-                  itemCount: controller.filteredCharacters.length,
+                  itemCount: controller.filteredCharacters.length +
+                      (controller.isLoadingMore ? 1 : 0),
                   shrinkWrap: true,
-                  itemBuilder: (context, index) => CharacterItem(
-                    character: controller.filteredCharacters[index],
-                  ),
+                  itemBuilder: (context, index) {
+                    if (index == controller.filteredCharacters.length) {
+                      return const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    return CharacterItem(
+                      character: controller.filteredCharacters[index],
+                    );
+                  },
                 );
               },
             ),

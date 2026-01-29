@@ -5,3 +5,7 @@ const String filterByTitle = 'Filtrar por';
 
 // Assets
 const String loadingAnimation = 'assets/animations/animation_tv.json';
+
+// API
+const String apiFuturama = 'https://futuramaapi.com/api';
+const String apiUrl = 'http://www.omdbapi.com/';

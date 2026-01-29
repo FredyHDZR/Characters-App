@@ -43,7 +43,8 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
   }
 
   void _onScroll() {
-    final isCollapsed = _scrollController.hasClients &&
+    final isCollapsed =
+        _scrollController.hasClients &&
         _scrollController.offset > (200 - kToolbarHeight);
     if (_isAppBarCollapsed != isCollapsed) {
       setState(() {
@@ -74,56 +75,52 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
             color: _isAppBarCollapsed ? AppColors.primary : AppColors.white,
           ),
           backgroundColor: Colors.transparent,
-          flexibleSpace: LayoutBuilder(
-            builder: (context, constraints) {
-              final isCollapsed = constraints.biggest.height <= kToolbarHeight;
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  if (_isAppBarCollapsed)
-                    ClipRRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                        child: Container(
-                          color: Colors.white.withValues(alpha: 0.1),
-                        ),
-                      ),
-                    ),
-                  FlexibleSpaceBar(
-                    title: Text(
-                      widget.character.name.toUpperCase(),
-                      style: AppFonts.boldTitle.copyWith(
-                        color: !_isAppBarCollapsed ? AppColors.white : AppColors.primary,
-                      ),
-                    ),
-                    background: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.network(
-                          widget.character.image ?? '',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Icon(Icons.image_not_supported, size: 80),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                AppColors.primary,
-                                AppColors.primary.withValues(alpha: 0.3),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+          flexibleSpace: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (_isAppBarCollapsed)
+                ClipRRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      color: Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
-                  
-                ],
-              );
-            },
+                ),
+              FlexibleSpaceBar(
+                title: Text(
+                  widget.character.name.toUpperCase(),
+                  style: AppFonts.boldTitle.copyWith(
+                    color: !_isAppBarCollapsed
+                        ? AppColors.white
+                        : AppColors.primary,
+                  ),
+                ),
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      widget.character.image ?? '',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Icon(Icons.image_not_supported, size: 80),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            AppColors.primary,
+                            AppColors.primary.withValues(alpha: 0.3),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         SliverToBoxAdapter(

@@ -12,14 +12,89 @@ abstract class HomeControllerBase with Store {
   @observable
   List<Character> characters = [];
 
+  @observable
+  String searchQuery = '';
+
+  @observable
+  List<Character> filteredCharacters = [];
+
+  @observable
+  String? selectedGender;
+
+  @observable
+  String? selectedSpecies;
+
+  @computed
+  List<String> get availableGenders {
+    final values = characters
+        .map((item) => item.gender.trim())
+        .where((value) => value.isNotEmpty)
+        .toSet()
+        .toList()
+      ..sort();
+    return values;
+  }
+
+  @computed
+  List<String> get availableSpecies {
+    final values = characters
+        .map((item) => item.species.trim())
+        .where((value) => value.isNotEmpty)
+        .toSet()
+        .toList()
+      ..sort();
+    return values;
+  }
+
+  List<Character> _applyFilters() {
+    final query = searchQuery.trim().toLowerCase();
+    return characters.where((c) {
+      if (query.isNotEmpty && !c.name.toLowerCase().contains(query)) return false;
+      if (selectedGender != null && c.gender != selectedGender) return false;
+      if (selectedSpecies != null && c.species != selectedSpecies) return false;
+      return true;
+    }).toList();
+  }
+
   @action
   void setCharacters(List<Character> characters) {
     this.characters = characters;
+    filteredCharacters = _applyFilters();
   }
 
   @action
   void toggleLoading() {
     isLoading = !isLoading;
+  }
+
+  @action
+  void setSearchQuery(String value) {
+    searchQuery = value;
+    filteredCharacters = _applyFilters();
+  }
+
+  @action
+  void filterCharacters(String query) {
+    setSearchQuery(query);
+  }
+
+  @action
+  void setSelectedGender(String? value) {
+    selectedGender = value;
+    filteredCharacters = _applyFilters();
+  }
+
+  @action
+  void setSelectedSpecies(String? value) {
+    selectedSpecies = value;
+    filteredCharacters = _applyFilters();
+  }
+
+  @action
+  void clearFilters() {
+    selectedGender = null;
+    selectedSpecies = null;
+    filteredCharacters = _applyFilters();
   }
 }
 

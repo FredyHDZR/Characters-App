@@ -27,10 +27,58 @@ mixin _$HomeController on HomeControllerBase, Store {
     });
   }
 
+  late final _$charactersAtom = Atom(
+    name: 'HomeControllerBase.characters',
+    context: context,
+  );
+
+  @override
+  List<Character> get characters {
+    _$charactersAtom.reportRead();
+    return super.characters;
+  }
+
+  @override
+  set characters(List<Character> value) {
+    _$charactersAtom.reportWrite(value, super.characters, () {
+      super.characters = value;
+    });
+  }
+
+  late final _$filteredCharactersAtom = Atom(
+    name: 'HomeControllerBase.filteredCharacters',
+    context: context,
+  );
+
+  @override
+  List<Character> get filteredCharacters {
+    _$filteredCharactersAtom.reportRead();
+    return super.filteredCharacters;
+  }
+
+  @override
+  set filteredCharacters(List<Character> value) {
+    _$filteredCharactersAtom.reportWrite(value, super.filteredCharacters, () {
+      super.filteredCharacters = value;
+    });
+  }
+
   late final _$HomeControllerBaseActionController = ActionController(
     name: 'HomeControllerBase',
     context: context,
   );
+
+  @override
+  void setCharacters(List<Character> characters) {
+    final _$actionInfo = _$HomeControllerBaseActionController.startAction(
+      name: 'HomeControllerBase.setCharacters',
+    );
+    try {
+      return super.setCharacters(characters);
+    } finally {
+      _$HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void toggleLoading() {
@@ -45,9 +93,23 @@ mixin _$HomeController on HomeControllerBase, Store {
   }
 
   @override
+  void filterCharacters(String query) {
+    final _$actionInfo = _$HomeControllerBaseActionController.startAction(
+      name: 'HomeControllerBase.filterCharacters',
+    );
+    try {
+      return super.filterCharacters(query);
+    } finally {
+      _$HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+characters: ${characters},
+filteredCharacters: ${filteredCharacters}
     ''';
   }
 }

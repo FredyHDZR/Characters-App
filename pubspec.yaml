@@ -25,3 +25,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/animations/
+  fonts:
+    - family: SulphurPoint
+      fonts:
+        - asset: assets/fonts/SulphurPoint-Regular.ttf
+        - asset: assets/fonts/SulphurPoint-Light.ttf
+        - asset: assets/fonts/SulphurPoint-Bold.ttf

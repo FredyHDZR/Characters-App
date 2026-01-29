@@ -6,7 +6,7 @@ class AppTheme {
   static ThemeData get theme => ThemeData(
     primarySwatch: Colors.blue,
     scaffoldBackgroundColor: AppColors.white,
-    fontFamily: AppFonts.roboto,
+    fontFamily: AppFonts.fontFamily,
     iconTheme: IconThemeData(color: AppColors.textSecondary),
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.white,

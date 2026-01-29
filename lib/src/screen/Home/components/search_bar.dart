@@ -13,17 +13,18 @@ class CustomSearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<CustomSearchBar> {
   final TextEditingController _controller = TextEditingController();
-  bool _showClearButton = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SearchBar(
       controller: _controller,
-      onChanged: (value) {
-        setState(() {
-          _showClearButton = value.isNotEmpty;
-        });
-      },
+      onChanged: widget.onSearch,
       onSubmitted: widget.onSearch,
       hintText: searchHintText,
       hintStyle: WidgetStateProperty.all(
@@ -36,17 +37,19 @@ class _SearchBarState extends State<CustomSearchBar> {
       elevation: WidgetStateProperty.all(1),
       leading: Icon(Icons.search),
       trailing: [
-        _showClearButton
-            ? IconButton(
-                onPressed: () {
-                  setState(() {
-                    _showClearButton = false;
-                    _controller.clear();
-                  });
-                },
-                icon: Icon(Icons.clear),
-              )
-            : SizedBox.shrink(),
+        ValueListenableBuilder<TextEditingValue>(
+          valueListenable: _controller,
+          builder: (context, value, _) {
+            if (value.text.isEmpty) return const SizedBox.shrink();
+            return IconButton(
+              onPressed: () {
+                _controller.clear();
+                widget.onSearch('');
+              },
+              icon: const Icon(Icons.clear),
+            );
+          },
+        ),
       ],
       padding: WidgetStateProperty.all(EdgeInsets.symmetric(horizontal: 16)),
     );

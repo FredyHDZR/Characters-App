@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppFonts {
-  static const String roboto = 'Roboto';
+  static const String fontFamily = 'SulphurPoint';
 
   static const TextStyle boldTitle = TextStyle(
     fontSize: 24,

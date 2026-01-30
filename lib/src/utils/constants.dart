@@ -11,6 +11,7 @@ const String statisticsTitle = 'Estadísticas';
 const String comingSoon = 'Proximamente';
 const String comingSoonMessage = 'Estamos trabajando para traerte más información';
 const String seriesTitle = 'Series';
+const String messageShowDetails = 'Conoce más sobre las series';
 
 // String keys
 const String genderKey = 'gender';

@@ -232,6 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
         children: [
+          Text(messageShowDetails, style: AppFonts.normalTitle.copyWith(color: AppColors.text),),
           SeriesBanner(
             key: _seriesBannerKey,
             seriesName: controller.selectedSeries,

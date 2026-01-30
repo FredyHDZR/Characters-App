@@ -10,6 +10,8 @@ const String episodesTitle = 'Episodios';
 const String statisticsTitle = 'Estadísticas';
 const String comingSoon = 'Proximamente';
 const String comingSoonMessage = 'Estamos trabajando para traerte más información';
+const String seriesTitle = 'Series';
+const String messageShowDetails = 'Conoce más sobre las series';
 
 // String keys
 const String genderKey = 'gender';
@@ -23,3 +25,4 @@ const String buildingAnimation = 'assets/animations/building_animation.json';
 // API
 const String apiFuturama = 'https://futuramaapi.com/api';
 const String apiUrl = 'http://www.omdbapi.com/';
+const String apiKey = '33648021';

@@ -3,21 +3,26 @@ import 'package:dio/dio.dart';
 import 'package:flutter_character_app/src/utils/constants.dart';
 
 class DioClient {
-  static DioClient? _instance;
+  static final Map<String, DioClient> _instances = {};
 
   late final Dio _dio;
+  final String baseUrl;
 
-  DioClient._internal() {
+  DioClient._internal(this.baseUrl) {
     _dio = Dio(BaseOptions(
-      baseUrl: apiFuturama,
+      baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 20),
       receiveTimeout: const Duration(seconds: 60),
     ));
   }
 
-  static DioClient get instance {
-    _instance ??= DioClient._internal();
-    return _instance!;
+  static DioClient get instance => getInstance(apiFuturama);
+
+  static DioClient getInstance(String baseUrl) {
+    if (!_instances.containsKey(baseUrl)) {
+      _instances[baseUrl] = DioClient._internal(baseUrl);
+    }
+    return _instances[baseUrl]!;
   }
 
   Dio get dio => _dio;

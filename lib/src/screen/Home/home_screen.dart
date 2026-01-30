@@ -12,6 +12,7 @@ import 'package:flutter_character_app/src/utils/constants.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'components/search_bar.dart';
+import 'components/series_banner.dart';
 import 'home_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController controller = HomeController();
   final GlobalKey _filterButtonKey = GlobalKey();
+  final GlobalKey _seriesBannerKey = GlobalKey();
   final ScrollController _scrollController = ScrollController();
 
   RelativeRect? _menuPositionFromKey(BuildContext context, GlobalKey key) {
@@ -114,6 +116,42 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<String?> _showSeriesMenu(
+    BuildContext context,
+    String seriesName,
+  ) async {
+    final position = _menuPositionFromKey(context, _seriesBannerKey);
+    if (position == null) return null;
+
+    final items = <PopupMenuEntry<String>>[
+      ...controller.seriesNames.map(
+        (s) => PopupMenuItem<String>(
+          value: s,
+          child: Text(
+            s,
+            style: AppFonts.normalTextBold.copyWith(color: AppColors.text),
+          ),
+        ),
+      ),
+    ];
+
+    return PopupMenu.show(
+      context,
+      position: position,
+      title: seriesTitle,
+      items: items,
+    );
+  }
+
+  Future<void> _showSeriesDetail(
+    BuildContext context,
+    String seriesName,
+  ) async {
+    final value = await _showSeriesMenu(context, controller.selectedSeries);
+    if (!mounted || value == null) return;
+    Navigator.pushNamed(context, RouteNames.showDetail, arguments: value);
+  }
+
   Future<void> _openFilterMenu(BuildContext context) async {
     final category = await _showFilterCategoryMenu(context);
     if (!mounted || category == null) return;
@@ -191,8 +229,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
         children: [
+          Text(messageShowDetails, style: AppFonts.normalTitle.copyWith(color: AppColors.text),),
+          SeriesBanner(
+            key: _seriesBannerKey,
+            seriesName: controller.selectedSeries,
+            onPressed: () =>
+                _showSeriesDetail(context, controller.selectedSeries),
+          ),
           Row(
             spacing: 16,
             children: [

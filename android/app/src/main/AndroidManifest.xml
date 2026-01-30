@@ -34,6 +34,18 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
+        <receiver
+            android:name=".CharacterWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="dev.fluttercommunity.plus.home_widget.UPDATE_WIDGET" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/character_widget_info" />
+        </receiver>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

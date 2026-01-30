@@ -157,7 +157,7 @@ class _ShowDetailScreenState extends State<ShowDetailScreen> {
 
   Widget iconInformation(IconData icon, String text, String value) {
     return Container(
-      constraints: BoxConstraints(minHeight: 150, maxHeight: 160),
+      constraints: BoxConstraints(minHeight: 150, maxHeight: 170),
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
       alignment: Alignment.center,
       decoration: BoxDecoration(

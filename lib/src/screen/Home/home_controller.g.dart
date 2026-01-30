@@ -195,6 +195,18 @@ mixin _$HomeController on HomeControllerBase, Store {
     });
   }
 
+  late final _$updateHomeWidgetAsyncAction = AsyncAction(
+    'HomeControllerBase.updateHomeWidget',
+    context: context,
+  );
+
+  @override
+  Future<void> updateHomeWidget(Character character) {
+    return _$updateHomeWidgetAsyncAction.run(
+      () => super.updateHomeWidget(character),
+    );
+  }
+
   late final _$getCharactersAsyncAction = AsyncAction(
     'HomeControllerBase.getCharacters',
     context: context,

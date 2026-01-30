@@ -1,5 +1,6 @@
 import 'package:flutter_character_app/src/models/character_model.dart';
 import 'package:flutter_character_app/src/services/home_service.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:mobx/mobx.dart';
 
 part 'home_controller.g.dart';
@@ -7,7 +8,13 @@ part 'home_controller.g.dart';
 class HomeController = HomeControllerBase with _$HomeController;
 
 abstract class HomeControllerBase with Store {
-  List<String> seriesNames = ['Futurama', 'The Simpsons', 'Rick and Morty', 'South Park', 'Family Guy'];
+  List<String> seriesNames = [
+    'Futurama',
+    'The Simpsons',
+    'Rick and Morty',
+    'South Park',
+    'Family Guy',
+  ];
 
   @observable
   String selectedSeries = 'Futurama';
@@ -38,23 +45,25 @@ abstract class HomeControllerBase with Store {
 
   @computed
   List<String> get availableGenders {
-    final values = characters
-        .map((item) => item.gender.trim())
-        .where((value) => value.isNotEmpty)
-        .toSet()
-        .toList()
-      ..sort();
+    final values =
+        characters
+            .map((item) => item.gender.trim())
+            .where((value) => value.isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
     return values;
   }
 
   @computed
   List<String> get availableSpecies {
-    final values = characters
-        .map((item) => item.species.trim())
-        .where((value) => value.isNotEmpty)
-        .toSet()
-        .toList()
-      ..sort();
+    final values =
+        characters
+            .map((item) => item.species.trim())
+            .where((value) => value.isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
     return values;
   }
 
@@ -64,7 +73,8 @@ abstract class HomeControllerBase with Store {
   List<Character> _applyFilters() {
     final query = searchQuery.trim().toLowerCase();
     return characters.where((c) {
-      if (query.isNotEmpty && !c.name.toLowerCase().contains(query)) return false;
+      if (query.isNotEmpty && !c.name.toLowerCase().contains(query))
+        return false;
       if (selectedGender != null && c.gender != selectedGender) return false;
       if (selectedSpecies != null && c.species != selectedSpecies) return false;
       return true;
@@ -75,6 +85,25 @@ abstract class HomeControllerBase with Store {
   void setCharacters(List<Character> characters) {
     this.characters = characters;
     filteredCharacters = _applyFilters();
+    if (characters.isNotEmpty) {
+      updateHomeWidget(characters.first);
+    }
+  }
+
+  @action
+  Future<void> updateHomeWidget(Character character) async {
+    try {
+      await HomeWidget.saveWidgetData('name', character.name);
+      if (character.image != null) {
+        await HomeWidget.saveWidgetData('image', character.image!);
+      }
+      await HomeWidget.updateWidget(
+        name: 'CharacterWidget',
+        androidName: 'CharacterWidget',
+      );
+    } catch (e) {
+      // Handle error silently
+    }
   }
 
   @action
@@ -136,7 +165,7 @@ abstract class HomeControllerBase with Store {
   @action
   Future<void> loadMoreCharacters() async {
     if (isLoadingMore || !hasMore) return;
-    
+
     isLoadingMore = true;
     final currentPage = page;
     final response = await HomeService.getCharacters(page: currentPage);

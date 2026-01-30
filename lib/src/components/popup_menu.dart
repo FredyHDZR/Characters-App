@@ -20,7 +20,7 @@ class PopupMenu {
           enabled: false,
           child: Text(
             title,
-            style: AppFonts.normalTextBold.copyWith(color: AppColors.text),
+            style: AppFonts.normalTitle.copyWith(color: AppColors.text),
           ),
         ),
         PopupMenuDivider(),

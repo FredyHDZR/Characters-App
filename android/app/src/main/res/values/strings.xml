@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">flutter_character_app</string>
+    <string name="widget_description">Muestra información del personaje</string>
+</resources>
+

@@ -212,3 +212,6 @@ Las URLs y claves de API están configuradas en `lib/src/utils/constants.dart`. 
 ## Licencia
 
 Este proyecto es de uso educativo.
+
+## Firebase App
+https://appdistribution.firebase.dev/i/3a9a7a13a2750270

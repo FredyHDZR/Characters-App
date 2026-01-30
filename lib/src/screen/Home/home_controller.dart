@@ -7,6 +7,11 @@ part 'home_controller.g.dart';
 class HomeController = HomeControllerBase with _$HomeController;
 
 abstract class HomeControllerBase with Store {
+  List<String> seriesNames = ['Futurama', 'The Simpsons', 'Rick and Morty', 'South Park', 'Family Guy'];
+
+  @observable
+  String selectedSeries = 'Futurama';
+
   @observable
   int page = 1;
 

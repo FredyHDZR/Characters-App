@@ -33,6 +33,24 @@ mixin _$HomeController on HomeControllerBase, Store {
     name: 'HomeControllerBase.hasMore',
   )).value;
 
+  late final _$selectedSeriesAtom = Atom(
+    name: 'HomeControllerBase.selectedSeries',
+    context: context,
+  );
+
+  @override
+  String get selectedSeries {
+    _$selectedSeriesAtom.reportRead();
+    return super.selectedSeries;
+  }
+
+  @override
+  set selectedSeries(String value) {
+    _$selectedSeriesAtom.reportWrite(value, super.selectedSeries, () {
+      super.selectedSeries = value;
+    });
+  }
+
   late final _$pageAtom = Atom(
     name: 'HomeControllerBase.page',
     context: context,
@@ -303,6 +321,7 @@ mixin _$HomeController on HomeControllerBase, Store {
   @override
   String toString() {
     return '''
+selectedSeries: ${selectedSeries},
 page: ${page},
 isLoading: ${isLoading},
 isLoadingMore: ${isLoadingMore},

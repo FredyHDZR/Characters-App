@@ -5,7 +5,7 @@ class AppFonts {
 
   static const TextStyle boldTitle = TextStyle(
     fontSize: 24,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.bold,
   );
 
   static const TextStyle normalTitle = TextStyle(
@@ -15,7 +15,7 @@ class AppFonts {
 
   static const TextStyle normalTextBold = TextStyle(
     fontSize: 16,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.bold,
   );
 
   static const TextStyle normalText = TextStyle(
@@ -30,6 +30,6 @@ class AppFonts {
 
   static const TextStyle smallTextBold = TextStyle(
     fontSize: 12,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.bold,
   );
 }
